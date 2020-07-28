@@ -1,4 +1,4 @@
-FROM python:3.7.7-buster AS builder
+FROM python:3.8.5-buster AS builder
 
 # docker-compose requires pyinstaller 3.6 (check github.com/docker/compose/requirements-build.txt)
 ARG VERSION=1.26.2
@@ -76,10 +76,11 @@ RUN mkdir -p ${REF}/init.groovy.d
 
 # jenkins version being bundled in this docker image
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:-2.244}
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.250}
 
 # jenkins.war checksum, download will be validated using it
-ARG JENKINS_SHA=91525d94e80f2cff29d5a43ebbf68a3e4e478810109b2947a79ea26a735a04b6
+# https://updates.jenkins-ci.org/download/war/
+ARG JENKINS_SHA=cdd74f5a7e08499e40480a866adabc8429c81f2ab6f1255cba1be2bd94e2f500
 
 # Can be used to customize where jenkins.war get downloaded from
 ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
