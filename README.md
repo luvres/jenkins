@@ -1,7 +1,7 @@
-## Jenkins with OpenJDK 11
+## Jenkins 2.259
 ### into Alpine OS with OpenJDK 11
 ### Maven for buildings
-### Docker in Docker
+### Docker in Docker (dind)
 -----
 
 #### Pull image

@@ -9,6 +9,7 @@ version: "3"
 # curl -O https://raw.githubusercontent.com/luvres/jenkins/master/sonarqube/docker-compose.yml
 #
 # docker-compose up -d
+# docker exec -u root -ti Jenkins bash -c "chmod 666 /var/run/docker.sock"
 #
 # http://localhost:23456
 #################################
