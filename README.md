@@ -1,6 +1,5 @@
-## Jenkins 2.259
-### into Alpine OS with OpenJDK 11
-### Maven for buildings
+## Jenkins 2.259 into Alpine OS with OpenJDK 11
+### Maven, docker-compose and kubect lfor buildings
 ### Docker in Docker (dind)
 -----
 
@@ -8,7 +7,6 @@
 ```
 docker pull izone/jenkins
 ```
-
 #### Run
 ```
 docker run --rm --name Jenkins \
@@ -22,6 +20,15 @@ docker run --rm --name Jenkins \
 http://localhost:8080/
 ```
 
+#### With docker-compose
+```
+docker-compose up -d jenkins
+```
+### (includes sonar if unspecified service)
+```
+docker-compose up
+```
+-----
 #### Build
 ```
 docker build -t izone/jenkins .
