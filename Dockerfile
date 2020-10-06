@@ -1,6 +1,5 @@
 FROM python:3.8.6-buster AS builder
 
-
 # docker-compose requires pyinstaller 3.6 (check github.com/docker/compose/requirements-build.txt)
 ARG VERSION=1.27.4
 ARG PYINSTALLER_VER=3.6
