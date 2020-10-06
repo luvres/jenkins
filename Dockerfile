@@ -31,18 +31,22 @@ FROM adoptopenjdk/openjdk11:alpine-slim
 COPY --from=builder /usr/bin/docker-compose /usr/bin/docker-compose
 
 RUN apk add --no-cache \
-  bash \
-  coreutils \
-  curl \
-  git \
-  git-lfs \
-  openssh-client \
-  tini \
-  ttf-dejavu \
-  tzdata \
-  unzip \
-  \
-  maven docker
+		bash \
+		coreutils \
+		curl \
+		git \
+		git-lfs \
+		openssh-client \
+		tini \
+		ttf-dejavu \
+		tzdata \
+		unzip \
+		\
+		maven docker \
+	\
+		# Install kubectl
+		&& curl -Lo /usr/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" \
+		&& chmod +x /usr/bin/kubectl
 
 ARG user=jenkins
 ARG group=jenkins
@@ -61,9 +65,9 @@ ENV REF $REF
 # If you bind mount a volume from the host or a data container,
 # ensure you use the same uid
 RUN mkdir -p $JENKINS_HOME \
-  && chown ${uid}:${gid} $JENKINS_HOME \
-  && addgroup -g ${gid} ${group} \
-  && adduser -h "$JENKINS_HOME" -u ${uid} -G ${group} -s /bin/bash -D ${user}
+		&& chown ${uid}:${gid} $JENKINS_HOME \
+		&& addgroup -g ${gid} ${group} \
+		&& adduser -h "$JENKINS_HOME" -u ${uid} -G ${group} -s /bin/bash -D ${user}
 
 # Jenkins home directory is a volume, so configuration and build history
 # can be persisted and survive image upgrades
