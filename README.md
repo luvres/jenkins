@@ -33,4 +33,13 @@ docker-compose up
 ```
 docker build -t izone/jenkins .
 ```
+### Master
+```
+docker build -t izone/jenkins:master ./master
+```
+### Agent
+```
+docker build -t izone/jenkins:agent ./agent
+```
+
 

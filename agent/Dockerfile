@@ -1,0 +1,36 @@
+# https://github.com/jenkinsci/docker-agent/blob/master/11/alpine/Dockerfile
+# https://github.com/jenkinsci/docker-inbound-agent/blob/master/11/alpine/Dockerfile
+FROM adoptopenjdk/openjdk11:alpine-slim
+
+ARG VERSION=4.5
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+
+RUN addgroup -g ${gid} ${group}
+RUN adduser -h /home/${user} -u ${uid} -G ${group} -D ${user}
+LABEL Description="This is a base image, which provides the Jenkins agent executable (slave.jar)" Vendor="Jenkins project" Version="${VERSION}"
+
+ARG AGENT_WORKDIR=/home/${user}/agent
+COPY jenkins-agent /usr/local/bin/jenkins-agent
+
+RUN apk add --update --no-cache curl bash git git-lfs openssh-client openssl procps \
+  && curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
+  && chmod 755 /usr/share/jenkins \
+  && chmod 644 /usr/share/jenkins/agent.jar \
+  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar \
+  && apk del curl \
+  \
+  && chmod +x /usr/local/bin/jenkins-agent \
+  && ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave
+USER ${user}
+ENV AGENT_WORKDIR=${AGENT_WORKDIR}
+RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR}
+
+VOLUME /home/${user}/.jenkins
+VOLUME ${AGENT_WORKDIR}
+WORKDIR /home/${user}
+
+ENTRYPOINT ["jenkins-agent"]
+
