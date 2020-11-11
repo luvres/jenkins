@@ -38,7 +38,7 @@ git-server:1.9
 popper-api:1.16.0-7
 display-url-api:2.3.3
 jira:3.1.3
-branch-api:2.6.1
+branch-api:2.6.3
 workflow-multibranch:2.22
 blueocean-jwt:1.24.3
 matrix-auth:2.6.4
@@ -69,7 +69,7 @@ workflow-cps-global-lib:2.17
 pam-auth:1.6
 git-client:3.5.1
 blueocean-display-url:2.4.0
-workflow-cps:2.84
+workflow-cps:2.85
 pipeline-stage-tags-metadata:1.7.2
 kubernetes-cd:2.3.1
 lockable-resources:2.10
@@ -95,7 +95,7 @@ sse-gateway:1.24
 blueocean-config:1.24.3
 blueocean-pipeline-api-impl:1.24.3
 workflow-step-api:2.23
-cloudbees-folder:6.14
+cloudbees-folder:6.15
 github-branch-source:2.9.1
 pubsub-light:1.13
 variant:1.3
