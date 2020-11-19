@@ -47,7 +47,9 @@ COPY jenkins-agent /usr/local/bin/jenkins-agent
 RUN apk add --update --no-cache \
 		curl bash git git-lfs openssh-client openssl procps \
 		\
-		maven docker \
+		maven docker py3-pip \
+	\
+		&& pip install awscli \
 	\
 		# Install kubectl
 		&& curl -Lo /usr/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" \
@@ -61,7 +63,8 @@ RUN apk add --update --no-cache \
 		\
 		&& chmod +x /usr/local/bin/jenkins-agent \
 		&& ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave
-USER ${user}
+#USER ${user}
+USER root
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR}
 
