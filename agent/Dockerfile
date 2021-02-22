@@ -1,7 +1,7 @@
-FROM python:3.9.1-buster AS builder
+FROM python:3.9.2-buster AS builder
 
 # docker-compose requires pyinstaller 3.6 (check github.com/docker/compose/requirements-build.txt)
-ARG VERSION=1.28.0
+ARG VERSION=1.28.4
 ARG PYINSTALLER_VER=4.1
 
 ENV LANG C.UTF-8
@@ -31,7 +31,7 @@ FROM adoptopenjdk/openjdk11:alpine-slim
 
 COPY --from=builder /usr/bin/docker-compose /usr/bin/docker-compose
 
-ARG VERSION=4.6
+ARG VERSION=4.7
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000

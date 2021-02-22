@@ -1,6 +1,6 @@
-## Jenkins 2.277 into Alpine OS with OpenJDK 11
-### Maven, docker-compose and kubect lfor buildings
-### Docker in Docker (dind)
+## Jenkins 2.280 into Alpine OS with OpenJDK 11
+### Maven, docker-compose and kubectl for buildings
+### jenkins-agent 4.7
 -----
 
 #### Pull image
