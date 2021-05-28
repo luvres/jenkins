@@ -31,7 +31,7 @@ FROM adoptopenjdk/openjdk11:alpine-slim
 
 COPY --from=builder /usr/bin/docker-compose /usr/bin/docker-compose
 
-ARG VERSION=4.8
+ARG VERSION=4.9
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000
