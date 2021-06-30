@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- jenkins-namespace.yaml
+#- jenkins-gluster-pvc.yaml
+#- jenkins-ceph-pvc.yaml
+- jenkins-longhorn-pvc.yaml
+
+namespace: jenkins
+
+commonLabels:
+  app: jenkins

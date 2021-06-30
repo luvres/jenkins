@@ -1,0 +1,114 @@
+# Just once to create namespace and pvc
+kubectl apply -k ./jenkins/namespace_pvc
+
+# Deploy jenkins (delete and apply to restart is here)
+kubectl apply -k ./jenkins
+
+#kubectl get po,svc,ing,deploy -n jenkins
+#kubectl get svc -n jenkins
+Jenkins URL: http://jenkins-master-service:65432/
+Jenkins tunnel: jenkins-master-service-jnlp:50000
+
+Pod Label
+	Key: jenkins
+	Value: slave
+
+Pod Templates	
+	Name: jenkins-agent
+	Namespace: jenkins
+
+Container Template
+	Name: jnlp
+	Docker image: izone/jenkins:agent-aws
+	
+EnvVars
+	Key: JENKINS_URL
+	Value: http://jenkins-master-service:65432/
+	
+	Key: AWS_ACCESS_KEY_ID
+	Value: XXXXXXXXXXXXXXXXXXXX
+	# -----------
+	Key: AWS_SECRET_ACCESS_KEY
+	Value: XXXXXXXXXXXXXXXXXXXXXXXXXXX/YYYYYYYYYYYY
+	# -----------
+	Key: AWS_DEFAULT_REGION
+	Value: us-east-1
+#export AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXXX
+#export AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXX/YYYYYYYYYYYY
+#export AWS_DEFAULT_REGION=us-east-1
+
+Volumes
+	Host path: /var/run/docker.sock
+	Mount path: /var/run/docker.sock
+
+# ----------------------
+# ----------------------
+# ----------------------
+# ---------------------- 
+ 
+pipeline {
+	agent { label 'kubepod' }
+	stages {
+	
+	  stage ('Build AuthServer') {
+			steps {
+				dir('AuthServer') {
+					git branch: 'feature/k8s', credentialsId: 'azure', url: 'https://exactapucrio@dev.azure.com/user/project'
+					sh '''
+					cp -a .m2 ~
+					mvn clean package -DskipTests=true
+					'''
+					sh 'docker build -t user/image:tag -f Dockerfile .'
+					withDockerRegistry([credentialsId: 'dockerhub_id', url: '']) {
+						sh 'docker push user/image:tag'
+					}
+					withCredentials([file(credentialsId: 'kubeconfigfile', variable: 'KUBECONFIG')]) {
+						sh '''
+						kubectl apply -f ./k8s -n default
+						'''
+					}
+				}
+			}
+		}
+	
+	}
+}
+
+
+## get plugins
+#http://169.8.192.100:65432/script
+
+Jenkins.instance.pluginManager.plugins.each{
+  plugin -> 
+    println ("${plugin.getDisplayName()} (${plugin.getShortName()}): ${plugin.getVersion()}")
+}
+
+
+###############
+# Get plugins #
+###############
+#https://qastack.com.br/programming/9815273/how-to-get-a-list-of-installed-jenkins-plugins-with-name-and-version-pair
+# -----------
+JENKINS="192.168.0.120"
+JENKINS="localhost"
+
+curl "${JENKINS}:65432/jnlpJars/jenkins-cli.jar" > jenkins-cli.jar
+
+tee plugins.groovy <<EOF
+def plugins = jenkins.model.Jenkins.instance.getPluginManager().getPlugins()
+plugins.each {println "\${it.getShortName()}:\${it.getVersion()}"}
+EOF
+
+java -jar jenkins-cli.jar -s http://${JENKINS}:65432/ groovy = < plugins.groovy > plugins.txt
+# -----------
+java -jar jenkins-cli.jar -s http://${JENKINS}:65432/ list-plugins
+# -----------
+
+## Themes
+#http://afonsof.com/jenkins-material-theme/
+https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-cyan.css
+https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-indigo.css
+https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-blue.css
+
+
+
