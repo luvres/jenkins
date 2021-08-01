@@ -47,7 +47,7 @@ COPY jenkins-agent /usr/local/bin/jenkins-agent
 RUN apk add --update --no-cache \
 		curl bash git git-lfs openssh-client openssl procps \
 		\
-		maven docker py3-pip \
+		maven docker py3-pip go \
 	\
 		&& pip install awscli \
 	\
