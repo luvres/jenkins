@@ -1,8 +1,8 @@
 FROM python:3.9.7-buster AS builder
 
 # docker-compose requires pyinstaller 3.6 (check github.com/docker/compose/requirements-build.txt)
-ARG VERSION=1.29.2
-ARG PYINSTALLER_VER=4.1
+ARG VERSION="1.29.2"
+ARG PYINSTALLER_VER="4.5.1"
 
 ENV LANG C.UTF-8
 
@@ -10,7 +10,11 @@ RUN mkdir -p /build/pyinstallerbootloader && \
 		# Compile the pyinstaller "bootloader"
 		# https://pyinstaller.readthedocs.io/en/stable/bootloader-building.html
 		cd /build/pyinstallerbootloader && \
-		curl -sSL https://github.com/pyinstaller/pyinstaller/releases/download/v$PYINSTALLER_VER/PyInstaller-$PYINSTALLER_VER.tar.gz | tar xz --strip 1 && \
+		\
+#		curl -sSL https://github.com/pyinstaller/pyinstaller/releases/download/v$PYINSTALLER_VER/PyInstaller-$PYINSTALLER_VER.tar.gz | tar xz --strip 1 && \
+		\
+		curl -sSL https://github.com/pyinstaller/pyinstaller/archive/refs/tags/v$PYINSTALLER_VER.tar.gz | tar xz --strip 1 && \
+		\
 		cd bootloader && python3 ./waf all && \
 		# Clone docker-compose
 		mkdir -p /build/dockercompose && \
@@ -80,11 +84,11 @@ RUN mkdir -p ${REF}/init.groovy.d
 
 # jenkins version being bundled in this docker image
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:-2.316}
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.317}
 
 # jenkins.war checksum, download will be validated using it
 # https://updates.jenkins-ci.org/download/war/
-ARG JENKINS_SHA=4128e1d9ea5a541ba620a8e94a43010694ca11fdefa9881702f934d2c2c0b970
+ARG JENKINS_SHA=063c1ae43e832f3ebcf82fb9191f9ae2e5a3d877c63861a8a58080249f9d04b9
 
 # Can be used to customize where jenkins.war get downloaded from
 ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war

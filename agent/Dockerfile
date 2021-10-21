@@ -1,8 +1,8 @@
 FROM python:3.9.7-buster AS builder
 
 # docker-compose requires pyinstaller 3.6 (check github.com/docker/compose/requirements-build.txt)
-ARG VERSION=1.29.2
-ARG PYINSTALLER_VER=4.1
+ARG VERSION="1.29.2"
+ARG PYINSTALLER_VER="4.5.1"
 
 ENV LANG C.UTF-8
 
@@ -10,7 +10,11 @@ RUN mkdir -p /build/pyinstallerbootloader && \
 		# Compile the pyinstaller "bootloader"
 		# https://pyinstaller.readthedocs.io/en/stable/bootloader-building.html
 		cd /build/pyinstallerbootloader && \
-		curl -sSL https://github.com/pyinstaller/pyinstaller/releases/download/v$PYINSTALLER_VER/PyInstaller-$PYINSTALLER_VER.tar.gz | tar xz --strip 1 && \
+		\
+#		curl -sSL https://github.com/pyinstaller/pyinstaller/releases/download/v$PYINSTALLER_VER/PyInstaller-$PYINSTALLER_VER.tar.gz | tar xz --strip 1 && \
+		\
+		curl -sSL https://github.com/pyinstaller/pyinstaller/archive/refs/tags/v$PYINSTALLER_VER.tar.gz | tar xz --strip 1 && \
+		\
 		cd bootloader && python3 ./waf all && \
 		# Clone docker-compose
 		mkdir -p /build/dockercompose && \
@@ -31,7 +35,7 @@ FROM adoptopenjdk/openjdk11:alpine-slim
 
 COPY --from=builder /usr/bin/docker-compose /usr/bin/docker-compose
 
-ARG VERSION=4.10
+ARG VERSION="4.11"
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000
