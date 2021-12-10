@@ -1,6 +1,6 @@
-## Jenkins 2.322 into Alpine OS with OpenJDK 11
+## Jenkins 2.324 into Alpine OS with OpenJDK 11
 ### Maven, docker-compose and kubectl for buildings
-### jenkins-agent 4.11
+### jenkins-agent 4.11.2
 ### Files to deploy on k8s 
 -----
 
